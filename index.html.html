@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛡️ CYBER PHISHING TACKLE GAME 🛡️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box; 
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #d15757;
+            color: #ffffff;
+            overflow-x: hidden;
+            background-image: url('bg.webp');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(243, 103, 103, 0.85);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+            background: rgba(85, 169, 238, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .menu-screen {
+            text-align: center;
+        }
+
+        .title {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #00ff00;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #00ffff;
+            margin-bottom: 30px;
+        }
+
+        .stats-box {
+            background-color: #2d2d2d;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 2px solid #00ffff;
+        }
+
+        .stats-text {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #ffff00;
+        }
+
+        .highscore-box {
+            background-color: #2d2d2d;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 3px solid #ff00ff;
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+        }
+
+        .highscore-text {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #ff00ff;
+            margin-bottom: 8px;
+            text-shadow: 0 0 10px #ff00ff;
+        }
+
+        .highscore-value {
+            font-size: 2em;
+            color: #ffff00;
+            font-weight: bold;
+            text-shadow: 0 0 10px #ffff00;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .level-button-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .level-badge {
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            background-color: #00ff00;
+            color: #000000;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.85em;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.6);
+            z-index: 10;
+        }
+
+        button {
+            padding: 20px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 300px;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .btn-primary {
+            background-color: #00ff00;
+            color: #000000;
+        }
+
+        .btn-primary:hover {
+            background-color: #00dd00;
+            transform: scale(1.05);
+        }
+
+        .btn-secondary {
+            background-color: #00ffff;
+            color: #000000;
+        }
+
+        .btn-secondary:hover {
+            background-color: #00dddd;
+            transform: scale(1.05);
+        }
+
+        .btn-warning {
+            background-color: #ffaa00;
+            color: #000000;
+        }
+
+        .btn-warning:hover {
+            background-color: #ffbb00;
+            transform: scale(1.05);
+        }
+
+        .btn-danger {
+            background-color: #ff0000;
+            color: #ffffff;
+        }
+
+        .btn-danger:hover {
+            background-color: #dd0000;
+            transform: scale(1.05);
+        }
+
+        .btn-success {
+            background-color: #00aa00;
+            color: #ffffff;
+        }
+
+        .btn-success:hover {
+            background-color: #00cc00;
+            transform: scale(1.05);
+        }
+
+        .header {
+            background-color: #2d2d2d;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 2px solid #00ffff;
+        }
+
+        .header-stats {
+            font-size: 1em;
+            font-weight: bold;
+            color: #ffff00;
+        }
+
+        .progress-bar {
+            font-size: 0.9em;
+            color: #00ffff;
+            margin-top: 8px;
+        }
+
+        .character-container {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+            align-items: start;
+        }
+
+        .character-box {
+            background-color: #2d2d2d;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid;
+        }
+
+        .attacker-box {
+            border-color: #ff6666;
+        }
+
+        .user-box {
+            border-color: #66ff66;
+        }
+
+        .character-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .attacker-box .character-title {
+            color: #ff6666;
+        }
+
+        .user-box .character-title {
+            color: #66ff66;
+        }
+
+        .arrow-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #ffff00;
+            font-weight: bold;
+        }
+
+        .message-box {
+            background-color: #1a1a1a;
+            border: 2px solid #555555;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .message-line {
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .indicators-box {
+            background-color: #1a1a1a;
+            border: 2px solid #555555;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .indicator-line {
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 6px;
+            font-size: 0.9em;
+        }
+
+        .result-text {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .result-correct {
+            color: #00ff00;
+        }
+
+        .result-wrong {
+            color: #ff0000;
+        }
+
+        .section-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #00ffff;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .content-box {
+            background-color: #1a1a1a;
+            border: 3px solid #00ffff;
+            border-radius: 12px;
+            padding: 25px;
+            max-height: 600px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .content-text {
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            line-height: 2;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.95em;
+        }
+
+        .content-text strong {
+            color: #ffff00;
+            text-shadow: 0 0 5px #ffff00;
+        }
+
+        .content-text .section-header {
+            color: #00ffff;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        .scoreboard-content {
+            background-color: #1a1a1a;
+            border: 2px solid #00ffff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .scoreboard-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ffff00;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 0 10px #ffff00;
+        }
+
+        .score-entry {
+            background-color: #2d2d2d;
+            border-left: 4px solid #00ff00;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .score-entry.medal1 {
+            border-left: 4px solid #ffd700;
+            background-color: #3d3d2d;
+        }
+
+        .score-entry.medal2 {
+            border-left: 4px solid #c0c0c0;
+            background-color: #2d3d3d;
+        }
+
+        .score-entry.medal3 {
+            border-left: 4px solid #cd7f32;
+            background-color: #3d2d2d;
+        }
+
+        .score-rank {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ffff00;
+            min-width: 40px;
+        }
+
+        .score-info {
+            flex: 1;
+            margin: 0 15px;
+        }
+
+        .score-mode {
+            font-size: 0.9em;
+            color: #00ff00;
+            margin-bottom: 3px;
+        }
+
+        .score-value {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #ffff00;
+        }
+
+        .score-date {
+            font-size: 0.85em;
+            color: #00dddd;
+            text-align: right;
+        }
+
+        .no-scores {
+            text-align: center;
+            color: #ff9999;
+            padding: 30px;
+            font-size: 1.1em;
+        }
+
+        .question-frame {
+            background-color: #2d2d2d;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 2px solid #00ffff;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #ffff00;
+            margin-bottom: 15px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            flex-direction: column;
+        }
+
+        .button-group button {
+            min-width: 130px;
+            padding: 15px 20px;
+            width: auto;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #00ff00;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00dd00;
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 1.8em;
+            }
+
+            .character-container {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            button {
+                min-width: 200px;
+                padding: 15px 20px;
+                font-size: 0.95em;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .button-group button {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- MENU SCREEN -->
+        <div class="screen menu-screen active">
+            <div class="title">🛡️ CYBER PHISHING TACKLE GAME 🛡️</div>
+            <div class="subtitle">Learn to Identify Phishing in Real Situations</div>
+            
+            <div class="highscore-box">
+                <div class="highscore-text">🏆 HIGHEST SCORE 🏆</div>
+                <div class="highscore-value" id="menu-highscore">0</div>
+            </div>
+
+            <div class="button-container">
+                <div class="level-button-wrapper">
+                    <button class="btn-primary" onclick="selectLevel(1)">☎️ LEVEL 1: CALLS & SMS<br>10 Questions</button>
+                    <div class="level-badge" id="level1-badge" style="display:none;">✅ COMPLETED</div>
+                </div>
+                <div class="level-button-wrapper">
+                    <button class="btn-secondary" onclick="selectLevel(2)">📧 LEVEL 2: EMAILS<br>10 Questions</button>
+                    <div class="level-badge" id="level2-badge" style="display:none;">✅ COMPLETED</div>
+                </div>
+                <button class="btn-warning" onclick="showEducation()">📚 EDUCATION CENTER</button>
+                <button class="btn-success" onclick="showScoreboard()">🏅 SCOREBOARD</button>
+                <button class="btn-danger" onclick="exitGame()">EXIT</button>
+            </div>
+        </div>
+
+        <!-- GAME SCREEN -->
+        <div class="screen game-screen">
+            <div class="header">
+                <div class="header-stats">Lives: <span id="game-lives">❤️❤️❤️</span> • Score: <span id="game-score">0</span></div>
+                <div class="progress-bar">Question <span id="question-num">1</span>/10</div>
+            </div>
+
+            <div style="text-align: center; margin-bottom: 15px;">
+                <div class="section-title">👤 UNKNOWN CONTACT</div>
+            </div>
+
+            <div class="character-container">
+                <div class="character-box attacker-box">
+                    <div class="character-title">🚨 UNKNOWN 🚨</div>
+                </div>
+                <div class="arrow-box">
+                    <div id="contact-method">💬</div>
+                    <div>━━━━</div>
+                    <div id="contact-label">TALKS</div>
+                </div>
+                <div class="character-box user-box">
+                    <div class="character-title">👤 YOU</div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <div style="color: #ffff00; font-weight: bold; margin-bottom: 10px;" id="message-title">💬 MESSAGE:</div>
+                <div class="message-box" id="message-content"></div>
+            </div>
+
+            <div style="margin-bottom: 15px;" id="indicators-section" class="hidden">
+                <div style="color: #ffff00; font-weight: bold; margin-bottom: 10px;">⚠️ RED FLAGS & SIGNS:</div>
+                <div class="indicators-box" id="indicators"></div>
+            </div>
+
+            <div class="question-frame">
+                <div class="question-text">❓ Do you TRUST this person or REPORT as suspicious?</div>
+                <div class="button-group">
+                    <button class="btn-primary" onclick="answerQuestion('L')">✓ TRUST</button>
+                    <button class="btn-danger" onclick="answerQuestion('P')">✗ REPORT</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESULT SCREEN -->
+        <div class="screen result-screen">
+            <div class="header">
+                <div class="header-stats">Score: <span id="result-score">0</span> • Lives: <span id="result-lives">❤️❤️❤️</span></div>
+            </div>
+
+            <div class="result-text" id="result-text">✅ CORRECT!</div>
+
+            <div style="background-color: #2d2d2d; border-radius: 10px; padding: 20px; margin-bottom: 20px; border: 2px solid #00ffff;">
+                <div class="section-title">📋 KEY INDICATORS</div>
+                <div class="indicators-box" id="result-indicators"></div>
+            </div>
+
+            <div class="question-frame">
+                <div class="button-group" id="result-button-group">
+                    <button class="btn-secondary" id="next-btn" onclick="nextQuestion()">➡ NEXT QUESTION</button>
+                    <button class="btn-warning" onclick="goToMenu()">🏠 MENU</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- EDUCATION SCREEN -->
+        <div class="screen education-screen">
+            <div class="header">
+                <div style="color: #00ffff; font-weight: bold; font-size: 1.3em; text-shadow: 0 0 10px #00ffff;">📚 PHISHING EDUCATION CENTER 📚</div>
+            </div>
+
+            <div class="content-box">
+                <div class="content-text" id="education-content">Loading education content...</div>
+            </div>
+
+            <div style="text-align: center;">
+                <button class="btn-warning" onclick="goToMenu()">⬅ BACK TO MENU</button>
+            </div>
+        </div>
+
+        <!-- SCOREBOARD SCREEN -->
+        <div class="screen scoreboard-screen">
+            <div class="header">
+                <div style="color: #ffff00; font-weight: bold; font-size: 1.3em;">🏅 SCOREBOARD 🏅</div>
+            </div>
+
+            <div class="scoreboard-content">
+                <div class="scoreboard-title">📊 TOP SCORES</div>
+                <div id="scoreboard-list"></div>
+            </div>
+
+            <div style="text-align: center; margin-bottom: 10px;">
+                <button class="btn-warning" style="margin-right: 10px;" onclick="clearScores()">🗑️ CLEAR SCORES</button>
+                <button class="btn-warning" onclick="goToMenu()">⬅ BACK TO MENU</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let gameState = {
+            score: 0,
+            level1Score: 0,
+            level2Score: 0,
+            lives: 3,
+            currentScenario: null,
+            questionsAnswered: 0,
+            maxQuestions: 10,
+            usedIndices: [],
+            level: 0,
+            level1Completed: false,
+            level2Completed: false
+        };
+
+        // LEVEL 1: CALLS & SMS (10 scenarios - Mixed trustable and suspicious)
+        const callsAndSms = [
+            {
+                type: "phishing",
+                name: "Unknown IT Support Scam",
+                method: "phone",
+                methodIcon: "☎️",
+                methodLabel: "CALLS",
+                messages: [
+                    "UNKNOWN: Hey! I'm from IT support.",
+                    "UNKNOWN: We detected unusual activity on your account.",
+                    "UNKNOWN: Can you give me your login password?",
+                    "UNKNOWN: It's completely safe, I promise!"
+                ],
+                redFlags: [
+                    "❌ Unsolicited call from stranger",
+                    "❌ Claims to be IT without verification",
+                    "❌ Asking for password directly",
+                    "❌ No way to verify identity",
+                    "❌ Creating artificial urgency"
+                ]
+            },
+            {
+                type: "phishing",
+                name: "Unknown Bank Fraud Alert",
+                method: "phone",
+                methodIcon: "☎️",
+                methodLabel: "CALLS",
+                messages: [
+                    "UNKNOWN: This is your bank calling!",
+                    "UNKNOWN: We detected fraud on your account.",
+                    "UNKNOWN: We need your card details to verify.",
+                    "UNKNOWN: Act now or your account will be frozen!"
+                ],
+                redFlags: [
+                    "❌ Banks NEVER ask for card details via phone",
+                    "❌ Threat of account freeze",
+                    "❌ Requesting sensitive financial info",
+                    "❌ Unverified caller",
+                    "❌ Creating panic and urgency"
+                ]
+            },
+            {
+                type: "legitimate",
+                name: "Unknown Customer Service",
+                method: "phone",
+                methodIcon: "☎️",
+                methodLabel: "CALLS",
+                messages: [
+                    "UNKNOWN: Hi! You recently ordered from us.",
+                    "UNKNOWN: We're calling to confirm your delivery.",
+                    "UNKNOWN: Can you verify your phone number?",
+                    "UNKNOWN: Your package arrives tomorrow!"
+                ],
+                redFlags: [
+                    "✓ Follows up on YOUR order",
+                    "✓ Only asking for verification info",
+                    "✓ Professional and brief",
+                    "✓ No password or card requests",
+                    "✓ Logical reason for call"
+                ]
+            },
+            {
+                type: "phishing",
+                name: "Unknown Tech Support Virus",
+                method: "phone",
+                methodIcon: "☎️",
+                methodLabel: "CALLS",
+                messages: [
+                    "UNKNOWN: Your computer has a serious virus!",
+                    "UNKNOWN: I need remote access to fix it.",
+                    "UNKNOWN: Go to this website and download this tool.",
+                    "UNKNOWN: This will cost $500 to fix properly."
+                ],
+                redFlags: [
+                    "❌ Unexpected call about computer problems",
+                    "❌ Requesting remote access to PC",
+                    "❌ Asking to download suspicious software",
+                    "❌ Demanding payment upfront",
+                    "❌ Using fear tactics"
+                ]
+            },
+            {
+                type: "legitimate",
+                name: "Unknown Appointment Reminder",
+                method: "phone",
+                methodIcon: "☎️",
+                methodLabel: "CALLS",
+                messages: [
+                    "UNKNOWN: Hi! This is your doctor's office.",
+                    "UNKNOWN: Reminder: You have an appointment tomorrow.",
+                    "UNKNOWN: Time: 2:00 PM, Location: Main Clinic",
+                    "UNKNOWN: Please call back if you need to reschedule."
+                ],
+                redFlags: [
+                    "✓ Expected appointment reminder",
+                    "✓ Specific appointment details",
+                    "✓ No personal info requested",
+                    "✓ Professional tone",
+                    "✓ Clear helpful purpose"
+                ]
+            },
+            {
+                type: "phishing",
+                name: "Unknown Government Scam",
+                method: "phone",
+                methodIcon: "☎️",
+                methodLabel: "CALLS",
+                messages: [
+                    "UNKNOWN: This is the tax authority!",
+                    "UNKNOWN: You owe back taxes immediately.",
+                    "UNKNOWN: Pay now in gift cards or face arrest!",
+                    "UNKNOWN: Give me your SSN and account number."
+                ],
+                redFlags: [
+                    "❌ Government never threatens arrest by phone",
+                    "❌ Never asks for payment in gift cards",
+                    "❌ Requesting SSN and financial info",
+                    "❌ Creating panic with threats",
+                    "❌ Can't verify legitimacy"
+                ]
+            },
+            {
+                type: "legitimate",
+                name: "Unknown Refund Notification",
+                method: "sms",
+                methodIcon: "📱",
+                methodLabel: "TEXTS",
+                messages: [
+                    "UNKNOWN: Hi! Your refund was approved.",
+                    "UNKNOWN: Amount: $45.50",
+                    "UNKNOWN: It will be in your account in 3-5 days.",
+                    "UNKNOWN: Thank you for shopping with us!"
+                ],
+                redFlags: [
+                    "✓ Expected refund notification",
+                    "✓ Specific amount shown",
+                    "✓ No urgent action required",
+                    "✓ No requests for personal info",
+                    "✓ Professional message"
+                ]
+            },
+            {
+                type: "phishing",
+                name: "Unknown Prize Winner Scam",
+                method: "phone",
+                methodIcon: "☎️",
+                methodLabel: "CALLS",
+                messages: [
+                    "UNKNOWN: Congratulations! You won a major prize!",
+                    "UNKNOWN: You were randomly selected!",
+                    "UNKNOWN: Send $99 processing fee to claim it.",
+                    "UNKNOWN: Your prize is worth $10,000!"
+                ],
+                redFlags: [
+                    "❌ Never entered any contest",
+                    "❌ Requesting payment upfront",
+                    "❌ Too good to be true",
+                    "❌ Unusual 'prize' offer",
+                    "❌ Pressure to pay immediately"
+                ]
+            },
+            {
+                type: "legitimate",
+                name: "Unknown Utility Company",
+                method: "sms",
+                methodIcon: "📱",
+                methodLabel: "TEXTS",
+                messages: [
+                    "UNKNOWN: Hello! Your electric bill is due on 25th.",
+                    "UNKNOWN: Amount: $125.30",
+                    "UNKNOWN: Pay online: www.electric.com/pay",
+                    "UNKNOWN: Account #: 123456"
+                ],
+                redFlags: [
+                    "✓ Expected bill notification",
+                    "✓ Specific account and amount",
+                    "✓ Official website link",
+                    "✓ No requests for passwords",
+                    "✓ Standard billing communication"
+                ]
+            },
+            {
+                type: "phishing",
+                name: "Unknown Delivery Verification",
+                method: "sms",
+                methodIcon: "📱",
+                methodLabel: "TEXTS",
+                messages: [
+                    "UNKNOWN: Package delivery pending!",
+                    "UNKNOWN: Verify address: bit.ly/delivery",
+                    "UNKNOWN: Enter credit card for confirmation.",
+                    "UNKNOWN: Act now or package returns."
+                ],
+                redFlags: [
+                    "❌ Shortened suspicious URL",
+                    "❌ Requesting credit card",
+                    "❌ Artificial urgency",
+                    "❌ Unknown sender",
+                    "❌ Delivery companies don't ask this"
+                ]
+            }
+        ];
+
+        // LEVEL 2: EMAILS (10 scenarios - Mixed trustable and suspicious)
+        const emails = [
+            {
+                type: "phishing",
+                name: "Unknown Account Suspension",
+                method: "email",
+                methodIcon: "📧",
+                methodLabel: "EMAILS",
+                messages: [
+                    "UNKNOWN: Your account will be suspended!",
+                    "UNKNOWN: Click here to verify immediately.",
+                    "UNKNOWN: Enter your username and password.",
+                    "UNKNOWN: Failure to verify = account deleted."
+                ],
+                redFlags: [
+                    "❌ Threat of account suspension",
+                    "❌ Creating artificial urgency",
+                    "❌ Requesting credentials/password",
+                    "❌ Suspicious verification link",
+                    "❌ Legitimate companies don't email for passwords"
+                ]
+            },
+            {
+                type: "phishing",
+                name: "Unknown PayPal Phishing",
+                method: "email",
+                methodIcon: "📧",
+                methodLabel: "EMAILS",
+                messages: [
+                    "UNKNOWN: PayPal: Unusual activity detected!",
+                    "UNKNOWN: Your account may be compromised.",
+                    "UNKNOWN: Verify here: paypa1-secure.tk/login",
+                    "UNKNOWN: Update password and card details now."
+                ],
+                redFlags: [
+                    "❌ Misspelled domain (paypa1 vs paypal)",
+                    "❌ Suspicious .tk domain",
+                    "❌ Requesting password in email",
+                    "❌ Generic greeting",
+                    "❌ PayPal never asks for passwords"
+                ]
+            },
+            {
+                type: "legitimate",
+                name: "Unknown Order Confirmation",
+                method: "email",
+                methodIcon: "📧",
+                methodLabel: "EMAILS",
+                messages: [
+                    "UNKNOWN: Your order #54321 is confirmed!",
+                    "UNKNOWN: Item: Wireless Headphones - $79.99",
+                    "UNKNOWN: Shipping to your address",
+                    "UNKNOWN: Track at www.amazon.com/orders"
+                ],
+                redFlags: [
+                    "✓ Specific order number and details",
+                    "✓ Correct item and price info",
+                    "✓ Direct to official website",
+                    "✓ From official domain",
+                    "✓ No requests for additional info"
+                ]
+            },
+            {
+                type: "phishing",
+                name: "Unknown Apple ID Scam",
+                method: "email",
+                methodIcon: "📧",
+                methodLabel: "EMAILS",
+                messages: [
+                    "UNKNOWN: Apple ID Security Alert!",
+                    "UNKNOWN: Someone tried to access your account.",
+                    "UNKNOWN: Click: apple-id-secure.ru/verify",
+                    "UNKNOWN: Verify password and credit card."
+                ],
+                redFlags: [
+                    "❌ Fake Apple domain (.ru extension)",
+                    "❌ Requesting password in email",
+                    "❌ Requesting credit card details",
+                    "❌ Foreign domain (Russia)",
+                    "❌ Apple never emails for passwords"
+                ]
+            },
+            {
+                type: "legitimate",
+                name: "Unknown Shipment Tracking",
+                method: "email",
+                methodIcon: "📧",
+                methodLabel: "EMAILS",
+                messages: [
+                    "UNKNOWN: Your shipment is on its way!",
+                    "UNKNOWN: Carrier: FedEx",
+                    "UNKNOWN: Tracking: 123456789ABC",
+                    "UNKNOWN: Track at www.fedex.com/track"
+                ],
+                redFlags: [
+                    "✓ Specific tracking number",
+                    "✓ Known carrier name",
+                    "✓ Direct to official tracking site",
+                    "✓ No suspicious requests",
+                    "✓ Professional format"
+                ]
+            },
+            {
+                type: "phishing",
+                name: "Unknown Microsoft Scam",
+                method: "email",
+                methodIcon: "📧",
+                methodLabel: "EMAILS",
+                messages: [
+                    "UNKNOWN: Microsoft Account Security Alert",
+                    "UNKNOWN: Suspicious login detected!",
+                    "UNKNOWN: Click: microsof-account.ru/verify",
+                    "UNKNOWN: Verify username, password, and phone."
+                ],
+                redFlags: [
+                    "❌ Misspelled domain (microsof not microsoft)",
+                    "❌ Foreign domain (.ru)",
+                    "❌ Requesting all credentials",
+                    "❌ Asking for phone number",
+                    "❌ Microsoft never asks for this"
+                ]
+            },
+            {
+                type: "legitimate",
+                name: "Unknown Password Reset",
+                method: "email",
+                methodIcon: "📧",
+                methodLabel: "EMAILS",
+                messages: [
+                    "UNKNOWN: Your password was changed.",
+                    "UNKNOWN: This was done on Jan 18, 2026.",
+                    "UNKNOWN: If this wasn't you, click here.",
+                    "UNKNOWN: https://account.example.com/security"
+                ],
+                redFlags: [
+                    "✓ Specific action reference",
+                    "✓ Date and time provided",
+                    "✓ Direct to account security",
+                    "✓ Legitimate notification",
+                    "✓ No requests for credentials"
+                ]
+            },
+            {
+                type: "phishing",
+                name: "Unknown Amazon Phishing",
+                method: "email",
+                methodIcon: "📧",
+                methodLabel: "EMAILS",
+                messages: [
+                    "UNKNOWN: Amazon Security Alert!",
+                    "UNKNOWN: Unusual activity on your account.",
+                    "UNKNOWN: Verify: amaz0n-secure.tk/login",
+                    "UNKNOWN: Update password and payment method."
+                ],
+                redFlags: [
+                    "❌ Misspelled domain (amaz0n with zero)",
+                    "❌ Suspicious .tk domain",
+                    "❌ Requesting password",
+                    "❌ Generic greeting",
+                    "❌ Amazon never emails for passwords"
+                ]
+            },
+            {
+                type: "legitimate",
+                name: "Unknown Receipt Email",
+                method: "email",
+                methodIcon: "📧",
+                methodLabel: "EMAILS",
+                messages: [
+                    "UNKNOWN: Hi! Here's your receipt.",
+                    "UNKNOWN: Order: 12345, Date: Jan 18, 2026",
+                    "UNKNOWN: Total: $234.50",
+                    "UNKNOWN: View full receipt: www.store.com/receipt"
+                ],
+                redFlags: [
+                    "✓ Expected receipt for purchase",
+                    "✓ Specific order and date",
+                    "✓ Correct total amount",
+                    "✓ Direct to official site",
+                    "✓ No suspicious requests"
+                ]
+            },
+            {
+                type: "phishing",
+                name: "Unknown Bank Account Alert",
+                method: "email",
+                methodIcon: "📧",
+                methodLabel: "EMAILS",
+                messages: [
+                    "UNKNOWN: Your bank account needs verification!",
+                    "UNKNOWN: We detected unauthorized access.",
+                    "UNKNOWN: Verify: bank-secure-login.net/verify",
+                    "UNKNOWN: Provide SSN and account number NOW."
+                ],
+                redFlags: [
+                    "❌ Fake bank domain",
+                    "❌ Requesting SSN and account number",
+                    "❌ Creating urgency and panic",
+                    "❌ Banks don't email for sensitive info",
+                    "❌ Suspicious domain"
+                ]
+            }
+        ];
+
+        const educationContent = `
+🎯 UNDERSTANDING PHISHING & SCAMS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📌 WHAT IS PHISHING?
+Phishing occurs when fraudsters pretend to be trustworthy organizations 
+to trick you into revealing sensitive information or downloading malware.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+☎️ LEVEL 1: CALLS & SMS (Vishing & Smishing)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚨 VISHING (Voice Phishing):
+• Scammers call posing as banks, IT support, or government agencies
+• They use social engineering to gain your trust
+• Common tactics: Creating urgency, threatening account closure, demanding payment
+• NEVER give passwords, PINs, or card details over the phone
+
+🚨 SMISHING (SMS Phishing):
+• Fraudulent text messages with suspicious links
+• Often contain shortened URLs (bit.ly, tinyurl, etc.)
+• May include fake delivery or account alerts
+• Links lead to fake websites designed to steal your info
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📧 LEVEL 2: EMAIL PHISHING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💻 HOW EMAIL PHISHING WORKS:
+• Fraudulent emails designed to look like legitimate companies
+• Use misspelled domain names (amaz0n vs amazon)
+• Foreign domains (.ru, .cn, .tk) are often used by scammers
+• They request passwords, credit card info, or personal data
+• Often include suspicious links or dangerous attachments
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️ CRITICAL RED FLAGS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ IMMEDIATE THREATS:
+  • Requests for passwords, PINs, or SSN
+  • Threats of account suspension or deletion
+  • Demands for immediate payment or action
+  • Unsolicited contact from "official" organizations
+
+❌ SUSPICIOUS CHARACTERISTICS:
+  • Misspelled company domains (paypa1 instead of paypal)
+  • Generic greetings ("Dear Customer" vs "Dear John")
+  • Grammar and spelling errors
+  • Shortened or obscured URLs
+  • Requests to "click here" or download files
+  • Foreign country domains (.ru, .cn, .tk)
+  • Threats of legal action or account closure
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ PROTECTIVE MEASURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. NEVER share passwords, PINs, or SSN via phone/email/text
+2. ALWAYS verify calls by hanging up and calling official numbers yourself
+3. Check email sender addresses carefully (look for typos)
+4. Hover over links to see the actual URL before clicking
+5. Type website URLs directly instead of clicking email links
+6. Enable two-factor authentication (2FA) on all accounts
+7. Keep software and antivirus updated
+8. Trust your instincts - if something feels wrong, it probably is
+9. Report suspicious contacts to official authorities
+10. Be especially cautious with requests for sensitive information
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💡 REMEMBER: LEGITIMATE COMPANIES NEVER...
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔒 Ask for passwords via email, phone, or text
+🔒 Threaten you with account closure via unsolicited contact
+🔒 Request credit card details via text messages
+🔒 Demand payment via gift cards or wire transfer
+🔒 Use misspelled domain names or foreign domains
+🔒 Send emails with urgent threats from unknown addresses
+🔒 Ask you to download suspicious files or open strange links
+🔒 Request your full SSN or sensitive personal information unsolicited
+        `;
+
+        function clearCompletionStatus() {
+            localStorage.removeItem('level1Completed');
+            localStorage.removeItem('level2Completed');
+        }
+
+        function updateLevelBadges() {
+            const level1Badge = document.getElementById('level1-badge');
+            const level2Badge = document.getElementById('level2-badge');
+            
+            level1Badge.style.display = gameState.level1Completed ? 'inline-block' : 'none';
+            level2Badge.style.display = gameState.level2Completed ? 'inline-block' : 'none';
+        }
+
+        function saveScore(score) {
+            let scores = JSON.parse(localStorage.getItem('phishingScores')) || [];
+            
+            scores.push({
+                score: score,
+                date: new Date().toLocaleDateString(),
+                time: new Date().toLocaleTimeString()
+            });
+            
+            scores.sort((a, b) => b.score - a.score);
+            scores = scores.slice(0, 20);
+            
+            localStorage.setItem('phishingScores', JSON.stringify(scores));
+            updateHighScore();
+        }
+
+        function getHighScore() {
+            let scores = JSON.parse(localStorage.getItem('phishingScores')) || [];
+            if (scores.length === 0) return 0;
+            return Math.max(...scores.map(s => s.score));
+        }
+
+        function updateHighScore() {
+            const highScore = getHighScore();
+            document.getElementById('menu-highscore').textContent = highScore;
+        }
+
+        function displayScoreboard() {
+            let scores = JSON.parse(localStorage.getItem('phishingScores')) || [];
+            scores.sort((a, b) => b.score - a.score);
+            
+            const scoreboardList = document.getElementById('scoreboard-list');
+            
+            if (scores.length === 0) {
+                scoreboardList.innerHTML = '<div class="no-scores">No scores yet. Start playing! 🎮</div>';
+                return;
+            }
+            
+            let html = '';
+            scores.forEach((score, index) => {
+                let medalClass = '';
+                let medal = '';
+                
+                if (index === 0) {
+                    medalClass = 'medal1';
+                    medal = '🥇';
+                } else if (index === 1) {
+                    medalClass = 'medal2';
+                    medal = '🥈';
+                } else if (index === 2) {
+                    medalClass = 'medal3';
+                    medal = '🥉';
+                } else {
+                    medal = (index + 1);
+                }
+                
+                html += `
+                    <div class="score-entry ${medalClass}">
+                        <div class="score-rank">${medal}</div>
+                        <div class="score-info">
+                            <div class="score-value">${score.score} points</div>
+                            <div class="score-mode">Completed</div>
+                        </div>
+                        <div class="score-date">${score.date}</div>
+                    </div>
+                `;
+            });
+            
+            scoreboardList.innerHTML = html;
+        }
+
+        function clearScores() {
+            if (confirm('Clear all scores? This cannot be undone.')) {
+                localStorage.removeItem('phishingScores');
+                updateHighScore();
+                displayScoreboard();
+                alert('All scores cleared! 🗑️');
+            }
+        }
+
+        function showScreen(screenName) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.querySelector(`.${screenName}`).classList.add('active');
+        }
+
+        function selectLevel(level) {
+            gameState.level = level;
+            gameState.score = 0;
+            gameState.lives = 3;
+            gameState.questionsAnswered = 0;
+            gameState.usedIndices = [];
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            if (gameState.questionsAnswered >= gameState.maxQuestions || gameState.lives <= 0) {
+                endGame();
+                return;
+            }
+            
+            const scenarios = gameState.level === 1 ? callsAndSms : emails;
+            
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * scenarios.length);
+            } while (gameState.usedIndices.includes(randomIndex));
+            
+            gameState.usedIndices.push(randomIndex);
+            gameState.currentScenario = scenarios[randomIndex];
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            const scenario = gameState.currentScenario;
+            
+            document.getElementById('contact-method').textContent = scenario.methodIcon;
+            document.getElementById('contact-label').textContent = scenario.methodLabel;
+            document.getElementById('message-title').textContent = scenario.methodIcon + ' MESSAGE:';
+            document.getElementById('game-lives').textContent = '❤️'.repeat(gameState.lives);
+            document.getElementById('game-score').textContent = gameState.score;
+            document.getElementById('question-num').textContent = gameState.questionsAnswered + 1;
+
+            const messageBox = document.getElementById('message-content');
+            messageBox.innerHTML = scenario.messages.map(msg => 
+                `<div class="message-line">${msg}</div>`
+            ).join('');
+
+            document.getElementById('indicators-section').classList.add('hidden');
+            showScreen('game-screen');
+        }
+
+        function answerQuestion(choice) {
+            const correct = gameState.currentScenario.type === 'legitimate' ? 'L' : 'P';
+            const isCorrect = choice === correct;
+            showResult(isCorrect);
+        }
+
+        function showResult(isCorrect) {
+            if (isCorrect) {
+                gameState.score += 10;
+                document.getElementById('result-text').textContent = '✅ CORRECT! Good judgment!';
+                document.getElementById('result-text').className = 'result-text result-correct';
+            } else {
+                gameState.lives -= 1;
+                document.getElementById('result-text').textContent = '❌ WRONG! You fell for it!';
+                document.getElementById('result-text').className = 'result-text result-wrong';
+            }
+
+            document.getElementById('result-score').textContent = gameState.score;
+            document.getElementById('result-lives').textContent = '❤️'.repeat(Math.max(0, gameState.lives));
+
+            const indBox = document.getElementById('result-indicators');
+            indBox.innerHTML = gameState.currentScenario.redFlags.map(flag => 
+                `<div class="indicator-line">${flag}</div>`
+            ).join('');
+
+            gameState.questionsAnswered++;
+
+            const resultButtonGroup = document.getElementById('result-button-group');
+            
+            if (gameState.lives <= 0 || gameState.questionsAnswered >= gameState.maxQuestions) {
+                if (gameState.level === 1) {
+                    gameState.level1Score = gameState.score;
+                    gameState.level1Completed = true;
+                    localStorage.setItem('level1Completed', JSON.stringify(true));
+                } else {
+                    gameState.level2Score = gameState.score;
+                    gameState.level2Completed = true;
+                    localStorage.setItem('level2Completed', JSON.stringify(true));
+                }
+                
+                const combinedScore = gameState.level1Score + gameState.level2Score;
+                saveScore(combinedScore);
+                
+                // Clear and rebuild button group based on level
+                resultButtonGroup.innerHTML = '';
+                
+                if (gameState.level === 1) {
+                    resultButtonGroup.innerHTML = `
+                        <button class="btn-primary" onclick="selectLevel(2)">➡ GO TO LEVEL 2: EMAILS</button>
+                        <button class="btn-warning" onclick="goToMenu()">🏠 MENU</button>
+                    `;
+                } else if (gameState.level === 2) {
+                    resultButtonGroup.innerHTML = `
+                        <button class="btn-primary" onclick="showEducation()">📚 EDUCATION CENTER</button>
+                        <button class="btn-warning" onclick="goToMenu()">🏠 MENU</button>
+                    `;
+                }
+            } else {
+                resultButtonGroup.innerHTML = `
+                    <button class="btn-secondary" onclick="nextQuestion()">➡ NEXT QUESTION</button>
+                    <button class="btn-warning" onclick="goToMenu()">🏠 MENU</button>
+                `;
+            }
+
+            showScreen('result-screen');
+        }
+
+        function showEducation() {
+            document.getElementById('education-content').textContent = educationContent;
+            showScreen('education-screen');
+        }
+
+        function showScoreboard() {
+            displayScoreboard();
+            showScreen('scoreboard-screen');
+        }
+
+        function endGame() {
+            goToMenu();
+        }
+
+        function goToMenu() {
+            gameState.questionsAnswered = 0;
+            gameState.score = 0;
+            gameState.lives = 3;
+            gameState.usedIndices = [];
+            gameState.level = 0;
+            updateLevelBadges();
+            showScreen('menu-screen');
+        }
+
+        function exitGame() {
+            if (confirm('Exit game?')) {
+                alert('Thanks for playing! Stay safe! 🛡️');
+            }
+        }
+
+        // Clear completion status when page loads/reloads
+        clearCompletionStatus();
+        updateHighScore();
+        document.getElementById('education-content').textContent = educationContent;
+    </script>
+</body>
+</html>
